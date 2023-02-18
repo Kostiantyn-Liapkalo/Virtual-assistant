@@ -35,3 +35,19 @@ class Record:
 
     def show_contact(self):
         return {"name": self.name, "phone": self.phones}
+
+
+# Creating addressbooks
+class AddressBook(UserDict):
+
+    def add_record(self, record: Record):
+        self.data[record.name.value] = record
+
+    def remove_record(self, record):
+        self.data.pop(record.name.value, None)
+
+    def show_records(self):
+        return self.data
+
+
+
