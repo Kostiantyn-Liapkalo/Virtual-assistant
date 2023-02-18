@@ -50,4 +50,17 @@ class AddressBook(UserDict):
         return self.data
 
 
+if __name__ == '__main__':
+    name = Name('Djohny')
+    phone = Phone('1234567890')
+    rec = Record(name, phone)
+    ab = AddressBook()
+    ab.add_record(rec)
 
+    assert isinstance(ab['Djohny'], Record)
+    assert isinstance(ab['Djohny'].name, Name)
+    assert isinstance(ab['Djohny'].phones, list)
+    assert isinstance(ab['Djohny'].phones[0], Phone)
+    assert ab['Djohny'].phones[0].value == '1234567890'
+
+    print('All is well !')
