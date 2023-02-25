@@ -1,10 +1,22 @@
 from collections import UserDict
+from datetime import datetime
 
 
 class Field:
 
     def __init__(self, value):
         self.value = value
+        
+    def __str__(self):
+        return self._value
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        self._value = value
 
 
 class Name(Field):
