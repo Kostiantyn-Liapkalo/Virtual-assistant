@@ -90,23 +90,64 @@ class Birthday(datetime):
 # Creating contacts
 class Record:
     
-    def __init__(self, name: Name, phone: Phone = None):
+    def __init__(self,
+                 name: Name,
+                 phone: Phone = None,
+                 birthday: Birthday = None):
         self.name = name
+        self.birthday = birthday
         self.phones = []
         if isinstance(phone, Phone):
             self.phones.append(phone)
 
+    def days_to_birthday(self):
+        cur_date = datetime.now().date()
+        cur_year = cur_date.year
+
+        if self.birthday is not None:
+            this_year_birthday = datetime(cur_year, self.birthday.month,
+                                          self.birthday.day).date()
+            delta = this_year_birthday - cur_date
+            if delta.days >= 0:
+                return f"{self.name}'s birthday will be in {delta.days} days"
+            else:
+                next_year_birthday = datetime(cur_year + 1,
+                                              self.birthday.month,
+                                              self.birthday.day).date()
+                delta = next_year_birthday - cur_date
+                return f"{self.name}'s birthday will be in {delta.days} days"
+
+    def add_birthday(self, year, month, day):
+        self.birthday = Birthday.validate_date(year, month, day)
+
     def add_phone(self, phone):
-        self.phone.append(phone)
+        phone = Phone(phone)
+        if phone:
+            self.phones.append(phone)
 
-    def change_phone(self, phone):
-        self.phones = phone
+    def change_phone(self, old_phone, new_phone):
+        old_phone = Phone(old_phone)
+        new_phone = Phone(new_phone)
 
-    def delete_phone(self):
-        self.phones = []
+        for phone in self.phones:
+            if phone.value == old_phone.value:
+                self.phones.remove(phone)
+                self.phones.append(new_phone)
+                return "phone was changed"
 
-    def show_contact(self):
-        return {"name": self.name, "phone": self.phones}
+    def delete_phone(self, old_phone):
+        old_phone = Phone(old_phone)
+        for phone in self.phones:
+            if phone.value == old_phone.value:
+                self.phones.remove(phone)
+
+    def get_contact(self):
+        phones = ", ".join([str(p) for p in self.phones])
+        return {
+            "name": str(self.name.value),
+            "phone": phones,
+            "birthday": self.birthday,
+        }
 
 
 # Creating addressbooks
