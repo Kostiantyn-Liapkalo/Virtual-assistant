@@ -156,24 +156,45 @@ class AddressBook(UserDict):
     def add_record(self, record: Record):
         self.data[record.name.value] = record
 
-    def remove_record(self, record):
-        self.data.pop(record.name.value, None)
+    def remove_record(self, name):
+        if name in self.data:
+            self.data.pop(name)
 
-    def show_records(self):
-        return self.data
+    def all_records(self):
+        return {key: value.get_contact() for key, value in self.data.items()}
+
+    def iterator(self):
+        for record in self.data.values():
+            yield record.get_contact()
 
 
 if __name__ == '__main__':
+    
     name = Name('Djohny')
     phone = Phone('1234567890')
     rec = Record(name, phone)
     ab = AddressBook()
     ab.add_record(rec)
+    
+    djohny = Name("Djohny")
+    djohny_phone = Phone("(067)874-28-45")
+    rec_djohny = Record(djohny, djohny_phone)
+    rec_djohny.add_phone("050-112-1222")
+    rec_djohny.change_phone("050-112-1222", "095-112-1222")
 
-    assert isinstance(ab['Djohny'], Record)
-    assert isinstance(ab['Djohny'].name, Name)
-    assert isinstance(ab['Djohny'].phones, list)
-    assert isinstance(ab['Djohny'].phones[0], Phone)
-    assert ab['Djohny'].phones[0].value == '1234567890'
+    rony = Name("Rony")
+    rony_phone = Phone("(067)1111111")
+    rec_rony = Record(rony, rony_phone)
+    rec_rony.add_phone("09712-100-11")
+    rec_rony.delete_phone("(067)1111111")
 
-    print('All is well !')
+    my_book = AddressBook()
+    my_book.add_record(rec_djohny)
+    my_book.add_record(rec_rony)
+
+    rec_djohny.add_birthday(2010, 11, 12)
+
+    print(my_book.all_records())
+
+
+
