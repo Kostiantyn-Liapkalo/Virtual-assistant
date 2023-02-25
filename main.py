@@ -17,14 +17,44 @@ class Field:
     @value.setter
     def value(self, value):
         self._value = value
-
-
+        
+    
+# Creating "name" field.
 class Name(Field):
-    pass
+    
+    def __str__(self):
+        return self._value.title()
 
 
+# Creating "phone" field.
 class Phone(Field):
-    pass
+  
+  # Change phone number to standart format.
+    @staticmethod
+    def sanitize_phone_number(phone):
+
+        new_phone = str(phone).strip().removeprefix("+").replace(
+            "(", "").replace(")", "").replace("-", "").replace(" ", "")
+        try:
+            new_phone = [str(int(i)) for i in new_phone]
+        except ValueError:
+            print("Number is not correct!")
+
+        else:
+            new_phone = "".join(new_phone)
+            if len(new_phone) == 12:
+                return f"+{new_phone}"
+            elif len(new_phone) == 10:
+                return f"+38{new_phone}"
+            else:
+                print("Length of number is wrong")
+
+    def __init__(self, value):
+        self._value = Phone.sanitize_phone_number(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Phone.sanitize_phone_number(value)
 
 
 # Creating contacts
