@@ -57,6 +57,36 @@ class Phone(Field):
         self._value = Phone.sanitize_phone_number(value)
 
 
+# Creating 'birthday' field.
+class Birthday(datetime):
+
+    @staticmethod
+    def validate_date(year, month, day):
+        try:
+            birthday = datetime(year=year, month=month, day=day)
+        except ValueError:
+            print("Date is not correct")
+        else:
+            return str(birthday.date())
+
+    def __init__(self, year, month, day):
+        self.__birthday = self.validate_date(year, month, day)
+
+    def __str__(self):
+        return self.__birthday.strftime('%Y-%m-%d')
+
+    def __repr__(self):
+        return self.__birthday.strftime('%Y-%m-%d')
+
+    @property
+    def birthday(self):
+        return self.__birthday
+
+    @birthday.setter
+    def birthday(self, year, month, day):
+        self.__birthday = self.validate_date(year, month, day)
+
+
 # Creating contacts
 class Record:
     
