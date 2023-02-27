@@ -170,12 +170,6 @@ class AddressBook(UserDict):
 
 if __name__ == '__main__':
     
-    name = Name('Djohny')
-    phone = Phone('1234567890')
-    rec = Record(name, phone)
-    ab = AddressBook()
-    ab.add_record(rec)
-    
     djohny = Name("Djohny")
     djohny_phone = Phone("(067)874-28-45")
     rec_djohny = Record(djohny, djohny_phone)
